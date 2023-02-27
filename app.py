@@ -16,3 +16,16 @@ class Review(db.Model):
     item_id = db.Column(db.Integer, nullable=False)
     review = db.Column(db.String(500), nullable=False)
     username = db.Column(db.String(30), nullable=False)
+
+@app.route("/reviews/<int:item_id>", methods=["GET", "POST"])
+def reviews(item_id=None):
+
+    if request.method == "GET":
+        reviews = Review.query.filter_by(item_id=item_id).all()
+        reviews_list = [{
+            "id": review.id,
+            "item_id": review.case_id,
+            "review": review.review,
+            "username": review.username,
+        } for review in reviews]
+        return jsonify(reviews_list)
